@@ -1,7 +1,9 @@
 const express = require('express')
-const mustacheExpress = require('mustache-express')
 const app = express()
+
+const mustacheExpress = require('mustache-express')
 const bodyParser = require('body-parser')
+const expressValidator = require('express-validator')
 
 app.engine('mst', mustacheExpress())
 app.set('views', './views')
@@ -15,6 +17,9 @@ app.use(bodyParser.json())
 // this will take the url encoded data and
 //only accept the primitive types of data (strings, numbers, NOT arrays, NOT objects)
 app.use(bodyParser.urlencoded({extended:false}))
+// This is registered after the bodyParser so that
+// there is something to validate
+app.use(expressValidator())
 
 // define a home page
 app.get("/", (req, res) => {
@@ -23,15 +28,31 @@ app.get("/", (req, res) => {
 });
 
 app.post('/thankyou', (req, res) => {
-  console.log("the request came from :", req.headers['user-agent'])
-  // i want to show the user that we got their info
-  const name = req.body.fullName
-  console.log("the user said their name was: " + name)
   console.log("the full body",req.body )
-  res.render('thankyou', {
-    fullName: req.body.fullName,
-    email: req.body.email
-  })
+
+  req
+    .checkBody("email", "You must give me your email")
+    .notEmpty();
+
+  req
+    .checkBody("fullName", "We need your full name")
+    .notEmpty();
+
+  const errors = req.validationErrors()
+  console.log(errors)
+  if (errors){
+    // render the form again with the errors
+    const data = {
+      errors: errors
+    }
+    res.render('home', data)
+  } else{
+    // render the thank you page
+      res.render('thankyou', {
+        fullName: req.body.fullName,
+        email: req.body.email
+      })
+  }
 });
 
 app.listen(3000, () => {

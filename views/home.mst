@@ -7,6 +7,11 @@
   <body>
     <form class="" action="/thankyou" method="post">
       <h4>Enter your email to learn about what is next for TIY?!?!?!?</h4>
+      <ul>
+        {{#errors}}
+          <li>{{msg}}</li>
+        {{/errors}}
+      </ul>
       <p>Your name please:</p>
         <input type="text" name="fullName" value="">
       <p>enter your email</p>
