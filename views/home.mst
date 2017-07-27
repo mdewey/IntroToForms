@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <form class="" action="/thankyou" method="post">
+      <h4>Enter your email to learn about what is next for TIY?!?!?!?</h4>
+      <p>Your name please:</p>
+        <input type="text" name="fullName" value="">
+      <p>enter your email</p>
+      <input type="email" name="email" value="">
+      <button type="submit" name="button">Go</button>
+    </form>
+  </body>
+</html>
